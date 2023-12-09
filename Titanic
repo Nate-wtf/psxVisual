@@ -1,0 +1,45 @@
+getgenv().AlwaysUpdate = true
+
+local titanicImages = {"rbxassetid://12588829816","rbxassetid://12889774106","rbxassetid://13132980374","rbxassetid://12673715051","rbxassetid://13362439386"}
+    local function titanicify(pet)
+        pet.PetIcon.Image = titanicImages[math.random(1,#titanicImages)]
+        if pet:FindFirstChild("PC") then	
+    else
+    local clone = pet.PetIcon:Clone()
+        clone.Name = "PC"
+        clone.Parent = pet
+        pet.Level.Text = "????"
+    end
+        if pet:FindFirstChild("PCC") then
+        else
+        local clone2 = pet.Level:Clone()
+        clone2.Name = "PCC"
+        clone2.Parent = pet
+        pet.Level.Visible = false
+        end
+        for i,v in pairs(pet.Stars:GetChildren()) do
+            if v.Name == "Star" then
+                v:Destroy()
+            end
+        end
+        if not pet.Stars:FindFirstChild("TitanicCrown") then
+		    game:GetService("ReplicatedStorage").Assets.UI.Inventory.TitanicCrown:Clone().Parent = pet.Stars
+        end
+end
+    
+if game:GetService("Players").LocalPlayer.PlayerGui.Mailbox.Frame.GiftPet.Container.Inventory.Visible == true then
+    for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.Mailbox.Frame.GiftPet.Container.Inventory.Pets:GetChildren()) do
+        if v:IsA("TextButton") then
+            titanicify(v)
+        end
+    end
+end
+game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("InfoOverlay").ChildAdded:Connect(function(child)  
+    child:Destroy()   
+ end)
+
+ game:GetService("Players").LocalPlayer.PlayerGui.Mailbox.Frame.GiftPet.Container.Inventory.Pets.ChildAdded:Connect(function(child)
+    if getgenv().AlwaysUpdate == true then
+        titanicify(child)
+    end
+ end)
